@@ -45,7 +45,7 @@ class ABMIL(nn.Module):
         x = self.mlp(x)
         raw_attn = self.attention(x)  # B x N x K
         raw_attn = torch.transpose(raw_attn, -2, -1)  # B x K x N
-        attn = attn.softmax(dim=-1)  # softmax over N
+        attn = raw_attn.softmax(dim=-1)  # softmax over N
         if attn_only:
             return attn
         x = torch.bmm(attn, x).squeeze(dim=1)  # B x K x C --> B x C

@@ -20,7 +20,7 @@ class ExtractedFeaturesDataset(torch.utils.data.Dataset):
         options: DatasetOptions,
     ):
         self.options = options
-        self.seed = self.options.df.seed
+        self.seed = self.options.seed
 
         self.df = self.prepare_data(self.options.df)
         self.num_classes = len(

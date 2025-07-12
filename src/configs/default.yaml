@@ -4,19 +4,22 @@ data:
   test_csv: ""
 
 output_dir: "output" # output directory
-experiment_name: ""
 
 task: "classification" # task type: classification, regression, survival
 
-num_classes: 2 # number of classes for classification task
+num_classes: 6 # number of classes for classification task
 label_name: "label"
 label_mapping:
 
-features_dir:
+metrics: # list of metrics to compute
+ - "quadratic_kappa"
+
+features_dir: "/path/to/precomputed/tile/features"
+features_dim: 1024
 
 model:
   batch_size: 1
-  embed_dim: 1024
+  embed_dim: ${features_dim}
   hidden_dim: 256
   dropout: 0.0
   gated: false # use gated attention mechanism
@@ -43,12 +46,12 @@ optim:
     gamma: 0.5
 
 early_stopping:
-  enable: False
+  enable: false
   tracking: "loss"
   min_max: "min"
   patience: 10
   min_epoch: 30
-  save_all: False
+  save_all: false
 
 speed:
   num_workers: 8 # number of workers for tiling slides

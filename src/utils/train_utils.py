@@ -17,6 +17,7 @@ def train(
     dataset: torch.utils.data.Dataset,
     optimizer: torch.optim.Optimizer,
     criterion: Callable,
+    metric_names: list[str],
     batch_size: int = 1,
     gradient_accumulation: int | None = None,
     num_workers: int = 0,
@@ -53,7 +54,7 @@ def train(
             x = x.to(device, non_blocking=True)
             label = label.to(device, non_blocking=True)
 
-            logits = model(x)
+            logits, attn = model(x)
             loss = criterion(logits, label)
 
             loss_value = loss.item()
@@ -86,6 +87,7 @@ def train(
     dataset.df.loc[idxs, f"pred"] = preds
 
     metrics = get_metrics(
+        metric_names,
         preds,
         labels,
         probs,
@@ -104,6 +106,7 @@ def tune(
     model: nn.Module,
     dataset: torch.utils.data.Dataset,
     criterion: Callable,
+    metric_names: list[str],
     batch_size: int = 1,
     num_workers: int = 0,
     device: torch.device | None = None,
@@ -140,7 +143,7 @@ def tune(
                 x = x.to(device, non_blocking=True)
                 label = label.to(device, non_blocking=True)
 
-                logits = model(x)
+                logits, attn = model(x)
                 loss = criterion(logits, label)
 
                 pred = torch.topk(logits, 1, dim=1)[1]
@@ -160,6 +163,7 @@ def tune(
     dataset.df.loc[idxs, f"pred"] = preds
 
     metrics = get_metrics(
+        metric_names,
         preds,
         labels,
         probs,
@@ -176,6 +180,7 @@ def tune(
 def inference(
     model: nn.Module,
     dataset: torch.utils.data.Dataset,
+    metric_names: list[str],
     batch_size: int = 1,
     num_workers: int = 0,
     device: torch.device | None = None,
@@ -210,7 +215,7 @@ def inference(
                 x = x.to(device, non_blocking=True)
                 label = label.to(device, non_blocking=True)
 
-                logits = model(x)
+                logits, attn = model(x)
 
                 pred = torch.topk(logits, 1, dim=1)[1]
                 preds.extend(pred[:, 0].clone().tolist())
@@ -227,6 +232,7 @@ def inference(
     dataset.df.loc[idxs, f"pred"] = preds
 
     metrics = get_metrics(
+        metric_names,
         preds,
         labels,
         probs,

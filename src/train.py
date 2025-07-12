@@ -52,7 +52,7 @@ def main(args):
     if "SLURM_JOB_CPUS_PER_NODE" in os.environ:
         num_workers = min(num_workers, int(os.environ["SLURM_JOB_CPUS_PER_NODE"]))
 
-    print(f"Loading data")
+    print("Loading data")
     train_df = pd.read_csv(cfg.data.train_csv)
     tune_df = pd.read_csv(cfg.data.tune_csv)
     if cfg.data.test_csv:
@@ -78,7 +78,7 @@ def main(args):
             label_mapping=cfg.label_mapping,
         )
 
-    print(f"Initializing datasets")
+    print("Initializing datasets")
     train_dataset = ExtractedFeaturesDataset(train_dataset_options)
     tune_dataset = ExtractedFeaturesDataset(tune_dataset_options)
     if cfg.data.test_csv:
@@ -122,8 +122,8 @@ def main(args):
     start_time = time.time()
 
     with tqdm.tqdm(
-        range(cfg.nepochs),
-        desc=(f"Training"),
+        range(cfg.training.nepochs),
+        desc=("Training"),
         unit=" epoch",
         leave=True,
     ) as t:
@@ -142,6 +142,7 @@ def main(args):
                 train_dataset,
                 optimizer,
                 criterion,
+                metric_names=cfg.metrics,
                 batch_size=cfg.training.batch_size,
                 gradient_accumulation=cfg.training.gradient_accumulation,
                 num_workers=num_workers,
@@ -161,6 +162,7 @@ def main(args):
                     model,
                     tune_dataset,
                     criterion,
+                    metric_names=cfg.metrics,
                     batch_size=cfg.tuning.batch_size,
                     num_workers=num_workers,
                     device=device,
@@ -191,7 +193,7 @@ def main(args):
             epoch_end_time = time.time()
             epoch_mins, epoch_secs = compute_time(epoch_start_time, epoch_end_time)
             tqdm.tqdm.write(
-                f"End of epoch {epoch+1} / {cfg.nepochs} \t Time Taken:  {epoch_mins}m {epoch_secs}s"
+                f"End of epoch {epoch+1} / {cfg.training.nepochs} \t Time Taken:  {epoch_mins}m {epoch_secs}s"
             )
 
             if stop:
@@ -211,6 +213,7 @@ def main(args):
     best_tune_results = inference(
         model,
         tune_dataset,
+        metric_names=cfg.metrics,
         batch_size=1,
         num_workers=num_workers,
         device=device,
@@ -232,11 +235,12 @@ def main(args):
         test_results = inference(
             model,
             test_dataset,
+            metric_names=cfg.metrics,
             batch_size=1,
             num_workers=num_workers,
             device=device,
         )
-        test_dataset.df.to_csv(Path(result_dir, f"test.csv"), index=False)
+        test_dataset.df.to_csv(Path(result_dir, "test.csv"), index=False)
 
         for r, v in test_results.items():
             if isinstance(v, float):
