@@ -12,9 +12,9 @@ from pathlib import Path
 from src.model import ABMIL
 from src.utils import (
     setup,
-    train,
-    tune,
-    inference,
+    train_classification as train,
+    tune_classification as tune,
+    inference_classification as inference,
     LossFactory,
     OptimizerFactory,
     SchedulerFactory,
@@ -87,7 +87,7 @@ def main(args):
     m, n = train_dataset.num_classes, tune_dataset.num_classes
     assert (
         m == n == cfg.num_classes
-    ), f"Either train (C={m}) or tune (C={n}) sets doesnt cover full class spectrum (C={cfg.num_classes}"
+    ), f"Either train (C={m}) or tune (C={n}) sets doesnt cover full class spectrum (C={cfg.num_classes})"
 
     criterion = LossFactory(cfg.task).get_loss()
 

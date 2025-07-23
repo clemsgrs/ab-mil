@@ -9,10 +9,17 @@ from .log_utils import setup_logging, update_log_dict
 from .config import setup
 from .train_utils import (
     LossFactory,
-    train,
-    tune,
-    inference,
     OptimizerFactory,
     SchedulerFactory,
     EarlyStopping,
+)
+from .classification_utils import (
+    train as train_classification,
+    tune as tune_classification,
+    inference as inference_classification,
+)
+from .regression_utils import (
+    train as train_regression,
+    tune as tune_regression,
+    inference as inference_regression,
 )

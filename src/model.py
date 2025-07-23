@@ -36,7 +36,7 @@ class ABMIL(nn.Module):
 
         self.classifier = nn.Linear(embed_dim, num_classes)
 
-    def forward(self, x, attn_only: bool = False):
+    def forward(self, x, return_attn: bool = False, attn_only: bool = False):
         # B: batch size
         # N: number of tiles in input whole-slide
         # D: tile feature dimension
@@ -50,4 +50,7 @@ class ABMIL(nn.Module):
             return attn
         x = torch.bmm(attn, x).squeeze(dim=1)  # B x K x C --> B x C
         x = self.classifier(x)
-        return x, attn
+        if return_attn:
+            return x, attn
+        else:
+            return x
