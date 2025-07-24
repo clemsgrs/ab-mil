@@ -54,7 +54,7 @@ early_stopping:
   save_all: false
 
 speed:
-  num_workers: 8 # number of workers for tiling slides
+  num_workers: 8
 
 wandb:
   enable: false

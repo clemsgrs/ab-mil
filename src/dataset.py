@@ -44,9 +44,6 @@ class ExtractedFeaturesDataset(torch.utils.data.Dataset):
             )
         return df_filtered
 
-    def get_label(self, idx):
-        return self.df[self.options.label_name][idx]
-
     def __getitem__(self, idx: int):
         row = self.df.loc[idx]
         case_id = row.case_id
