@@ -127,7 +127,7 @@ def main(args):
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
         model = ABMIL(
-            embed_dim=cfg.model.embed_dim,
+            features_dim=cfg.model.features_dim,
             hidden_dim=cfg.model.hidden_dim,
             num_classes=cfg.num_classes,
             dropout=cfg.model.dropout,
@@ -227,7 +227,7 @@ def main(args):
 
                 # logging
                 if cfg.wandb.enable:
-                    wandb.log(log_dict, step=epoch+1)
+                    wandb.log(log_dict)
 
                 epoch_end_time = time.time()
                 epoch_mins, epoch_secs = compute_time(epoch_start_time, epoch_end_time)

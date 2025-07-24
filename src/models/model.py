@@ -7,7 +7,7 @@ from src.models.utils import MLP, Attn_Net, Attn_Net_Gated
 class ABMIL(nn.Module):
     def __init__(
         self,
-        embed_dim: int,
+        features_dim: int,
         hidden_dim: int,
         num_classes: int,
         dropout: float = 0.1,
@@ -15,26 +15,26 @@ class ABMIL(nn.Module):
     ):
         super().__init__()
         self.mlp = MLP(
-            input_dim=embed_dim,
+            input_dim=features_dim,
             hidden_dim=hidden_dim,
-            output_dim=embed_dim,
+            output_dim=features_dim,
             num_layers=3,
         )
 
         if gated:
             self.attention = Attn_Net_Gated(
-                input_dim=embed_dim,
+                input_dim=features_dim,
                 hidden_dim=hidden_dim,
                 dropout=dropout,
             )
         else:
             self.attention = Attn_Net(
-                input_dim=embed_dim,
+                input_dim=features_dim,
                 hidden_dim=hidden_dim,
                 dropout=dropout,
             )
 
-        self.classifier = nn.Linear(embed_dim, num_classes)
+        self.classifier = nn.Linear(features_dim, num_classes)
 
     def forward(self, x, return_attn: bool = False, attn_only: bool = False):
         # B: batch size
