@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from src.components import MLP, Attn_Net, Attn_Net_Gated
+from src.models.utils import MLP, Attn_Net, Attn_Net_Gated
 
 
 class ABMIL(nn.Module):

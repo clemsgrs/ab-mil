@@ -3,7 +3,7 @@ import torch.nn as nn
 
 from pathlib import Path
 
-from src.components import NLLSurvLoss
+from src.utils.loss import NLLSurvLoss
 
 
 def collate_features(batch, label_type: str = "int"):

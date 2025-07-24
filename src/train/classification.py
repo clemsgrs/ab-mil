@@ -9,8 +9,8 @@ import torch
 import tqdm
 import wandb
 
-from src.dataset import DatasetOptions, ExtractedFeaturesDataset
-from src.model import ABMIL
+from src.data.dataset import DatasetOptions, ExtractedFeaturesDataset
+from src.models.model import ABMIL
 from src.utils import (
     EarlyStopping,
     LossFactory,

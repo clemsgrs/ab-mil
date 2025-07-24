@@ -5,7 +5,7 @@ import torch.nn as nn
 from functools import partial
 from collections.abc import Callable
 
-from src.metrics import get_metrics
+from src.utils.metrics import get_metrics
 from src.utils.train_utils import collate_features
 
 
