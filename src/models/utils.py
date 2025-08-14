@@ -8,7 +8,7 @@ class MLP(nn.Module):
     """
 
     def __init__(
-        self, input_dim: int, hidden_dim: int, output_dim: int, num_layers: int
+        self, input_dim: int, hidden_dim: int, output_dim: int, num_layers: int, dropout: float = 0.0
     ):
         super().__init__()
         layers = []
@@ -17,7 +17,9 @@ class MLP(nn.Module):
         for _ in range(num_layers - 2):
             layers.append(nn.Linear(hidden_dim, hidden_dim))
             layers.append(nn.ReLU())
+            layers.append(nn.Dropout(dropout))
         layers.append(nn.Linear(hidden_dim, output_dim))
+        layers.append(nn.ReLU())
         self.mlp = nn.Sequential(*layers)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -33,7 +35,7 @@ class Attn_Net(nn.Module):
         dropout: dropout
     """
 
-    def __init__(self, input_dim: int, hidden_dim: int = 256, dropout=0.0):
+    def __init__(self, input_dim: int, hidden_dim: int, dropout=0.0):
         super(Attn_Net, self).__init__()
         self.net = [
             nn.Linear(input_dim, hidden_dim),
@@ -58,7 +60,7 @@ class Attn_Net_Gated(nn.Module):
         dropout: dropout
     """
 
-    def __init__(self, input_dim: int, hidden_dim: int = 256, dropout=0.0):
+    def __init__(self, input_dim: int, hidden_dim: int, dropout=0.0):
         super(Attn_Net_Gated, self).__init__()
         self.attention_a = [
             nn.Linear(input_dim, hidden_dim),
