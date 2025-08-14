@@ -129,9 +129,11 @@ def main(args):
         model = ABMIL(
             features_dim=cfg.model.features_dim,
             hidden_dim=cfg.model.hidden_dim,
+            attn_dim=cfg.model.attn_dim,
             num_classes=1,
             dropout=cfg.model.dropout,
             gated=cfg.model.gated,
+            num_intermediate_layers=cfg.model.num_intermediate_layers,
         )
         model.to(device)
         print(model)

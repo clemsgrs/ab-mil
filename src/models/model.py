@@ -13,13 +13,14 @@ class ABMIL(nn.Module):
         num_classes: int,
         dropout: float = 0.0,
         gated: bool = False,
+        num_intermediate_layers: int = 3,
     ):
         super().__init__()
         self.mlp = MLP(
             input_dim=features_dim,
             hidden_dim=hidden_dim,
             output_dim=hidden_dim,
-            num_layers=3,
+            num_layers=num_intermediate_layers,
             dropout=dropout
         )
 
