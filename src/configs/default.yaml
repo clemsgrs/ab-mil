@@ -22,7 +22,7 @@ model:
   features_dim: ${features_dim}
   hidden_dim: 512
   attn_dim: 384
-  num_intermediate_layers: 3
+  num_layers: 3
   dropout: 0.25
   gated: true # use gated attention mechanism
 

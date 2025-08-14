@@ -105,7 +105,7 @@ def main(args):
         num_classes=1,
         dropout=cfg.model.dropout,
         gated=cfg.model.gated,
-        num_intermediate_layers=cfg.model.num_intermediate_layers,
+        num_layers=cfg.model.num_layers,
     )
     model.to(device)
     print(model)
